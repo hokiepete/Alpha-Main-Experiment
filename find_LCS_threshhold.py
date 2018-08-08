@@ -14,10 +14,13 @@ import numpy.ma as ma
 import time
 import calendar
 plt.close('all')
-tstart = calendar.timegm(time.strptime('Aug 5, 2018 @ 00:00:00 UTC', '%b %d, %Y @ %H:%M:%S UTC'))
+tstart = calendar.timegm(time.strptime('Aug 7, 2018 @ 12:00:00 UTC', '%b %d, %Y @ %H:%M:%S UTC'))
 
-wthresh = 4
+wthresh = 5
 nthresh = 5
+
+#wthresh = 0
+#nthresh = 0
 
 with hp.File('windageLCS.hdf5','r') as loadfile:
         nftle = loadfile['nftle'][:]
@@ -73,7 +76,7 @@ parallels = np.arange(round(lat_min,1),lat_max+0.1,0.1)
 meridians = np.arange(round(lon_max,1),lon_min-0.1,-0.1)
 m.drawparallels(parallels,labels=[1,0,0,0],fontsize=10)
 m.drawmeridians(meridians,labels=[0,0,0,1],fontsize=10)
-plt.title("Blue: windage = 0.019; Red: No windage")
+plt.title("Blue: windage = 0.019; Red: No windage, 2pm EDT")
 divider = make_axes_locatable(plt.gca())
 cax = divider.append_axes("right", size="5%", pad=0.05)
 plt.colorbar(pc, cax=cax)
@@ -88,7 +91,7 @@ m.drawmeridians(meridians,labels=[0,0,0,1],fontsize=10)
 divider = make_axes_locatable(plt.gca())
 cax = divider.append_axes("right", size="5%", pad=0.05)
 plt.colorbar(pc, cax=cax)
-plt.title(time.gmtime(t[-1]+tstart))
+#plt.title(time.gmtime(t[-1]+tstart))
 plt.figure(1)
 plt.subplot(111)
 
@@ -99,6 +102,7 @@ parallels = np.arange(round(lat_min,1),lat_max+0.1,0.1)
 meridians = np.arange(round(lon_max,1),lon_min-0.1,-0.1)
 m.drawparallels(parallels,labels=[1,0,0,0],fontsize=10)
 # draw meridians
+plt.title('Blue = Windage 0.019, Red = No Windage, 2pm EDT')
 m.drawmeridians(meridians,labels=[0,0,0,1],fontsize=10)
 ax = plt.gca()
 def format_coord(x, y):

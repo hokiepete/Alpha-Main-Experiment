@@ -12,10 +12,10 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 from mpl_toolkits.basemap import Basemap
 plt.close('all')
-tstart = calendar.timegm(time.strptime('Aug 5, 2018 @ 00:00:00 UTC', '%b %d, %Y @ %H:%M:%S UTC'))
+tstart = calendar.timegm(time.strptime('Aug 7, 2018 @ 12:00:00 UTC', '%b %d, %Y @ %H:%M:%S UTC'))
 wc = 0.019 #Windage Coefficent
 
-ncfile="MIT_nsf_alpha200m_2018080500_2018080600_2018080800_01h-depth-00m-wind.nc"
+ncfile="MIT_nsf_alpha200m_2018080700_2018080800_2018081000_01h-depth-00m-wind.nc"
 root = Dataset(ncfile,'r') #read the data
 vars = root.variables #dictionary, all variables in dataset\
 print(vars.keys())
@@ -40,7 +40,6 @@ lon_max = lon.max()
 lat_min = lat.min()
 lat_max = lat.max()
 lon, lat = np.meshgrid(lon,lat)
-
 dudy,dudx = np.gradient(u,dy,dx,edge_order=2)
 dvdy,dvdx = np.gradient(v,dy,dx,edge_order=2)
 s1 = np.ma.empty([ydim,xdim])
@@ -76,18 +75,18 @@ for i in range(ydim):
 s1_nowindage = s1
 del s1
 print('begin plot')
-'''
+#'''
 m = Basemap(llcrnrlon=lon_min,
             llcrnrlat=lat_min,
             urcrnrlon=lon_max,
             urcrnrlat=lat_max,
             projection='merc',
-            resolution = 'i',
+            resolution = 'l',
             area_thresh=0.,
             )
-'''
 parallels = np.arange(round(lat_min,1),lat_max+0.1,0.1)
 meridians = np.arange(round(lon_max,1),lon_min-0.1,-0.1)
+'''
 m = Basemap(llcrnrlon=-70.9,
             llcrnrlat=41.25,
             urcrnrlon=-70.7,
@@ -98,6 +97,7 @@ m = Basemap(llcrnrlon=-70.9,
             resolution = 'f',
             area_thresh=0.,
             )
+#''
 root = Dataset('m_drifters_windage.nc','r')
 loadfile = root.variables
 wtlat = loadfile['lat'][:]
@@ -111,35 +111,45 @@ ntlat = loadfile['lat'][:]
 ntlon = loadfile['lon'][:]
 #t = loadfile['time'][:]
 root.close()
-
+'''
+date_time = time.gmtime(data_time[t])
+#timestamp = str(date_time.tm_mon)+'/'+str(date_time.tm_mday)+'/'+str(date_time.tm_year)+' @ {0:02d}'.format(date_time.tm_hour)+'
+timestamp = "{0:02d}/{1:02d}/{2:02d} @ {3:02d}:{4:02d} UTC".format(date_time.tm_mon,date_time.tm_mday,date_time.tm_year,date_time.tm_hour,date_time.tm_min)
+print(timestamp)
 pltsize = [15,12]
 fig = plt.figure(1,figsize=pltsize, dpi=150)
+plt.subplot(1,2,1)
 sc = m.contourf(lon,lat,s1_nowindage,levels=np.linspace(s1_nowindage.min(axis=None),s1_nowindage.max(axis=None),301),latlon=True)
+'''
 m.scatter(ntlon,ntlat, latlon=True,color='orange',label="No Windage Tracers")
 m.scatter(wtlon,wtlat, latlon=True,color='cyan',label="Windage Tracers")
 m.scatter(wtlon[:,0],wtlat[:,0], latlon=True,color='red',label="Initial Position")
+'''
 plt.legend()
-plt.title("s$_{1}$ at 2pm")
+plt.title("s$_{1}$ "+timestamp)
 m.drawcoastlines()
 m.drawparallels(parallels,labels=[1,0,0,0],fontsize=10)
 m.drawmeridians(meridians,labels=[0,0,0,1],fontsize=10)
 divider = make_axes_locatable(plt.gca())
 cax = divider.append_axes("right", size="5%", pad=0.05)
 plt.colorbar(sc, cax=cax)
-plt.savefig('No_Windage_S1_Closeup.png', transparent=False, bbox_inches='tight')
+#plt.savefig('No_Windage_S1_Closeup.png', transparent=False, bbox_inches='tight')
 
 
-fig = plt.figure(2,figsize=pltsize, dpi=150)
+#fig = plt.figure(2,figsize=pltsize, dpi=150)
+plt.subplot(1,2,2)
 sc = m.contourf(lon,lat,s1_windage,levels=np.linspace(s1_windage.min(axis=None),s1_windage.max(axis=None),301),latlon=True)
+'''
 m.scatter(ntlon,ntlat, latlon=True,color='orange',label="No Windage Tracers")
 m.scatter(wtlon,wtlat, latlon=True,color='cyan',label="Windage Tracers")
 m.scatter(wtlon[:,0],wtlat[:,0], latlon=True,color='red',label="Initial Position")
+'''
 plt.legend()
-plt.title("windage s$_{1}$ at 2pm")
+plt.title("windage s$_{1}$ "+timestamp)
 m.drawcoastlines()
 m.drawparallels(parallels,labels=[1,0,0,0],fontsize=10)
 m.drawmeridians(meridians,labels=[0,0,0,1],fontsize=10)
 divider = make_axes_locatable(plt.gca())
 cax = divider.append_axes("right", size="5%", pad=0.05)
 plt.colorbar(sc, cax=cax)
-plt.savefig('Windage_S1_Closeup.png', transparent=False, bbox_inches='tight')
+plt.savefig('Windage_S1_{0:02d}.png'.format(t), transparent=False, bbox_inches='tight')
