@@ -16,8 +16,8 @@ import calendar
 plt.close('all')
 tstart = calendar.timegm(time.strptime('Aug 7, 2018 @ 12:00:00 UTC', '%b %d, %Y @ %H:%M:%S UTC'))
 
-wthresh = 5
-nthresh = 5
+wthresh = 4
+nthresh = 4
 
 #wthresh = 0
 #nthresh = 0
@@ -67,6 +67,7 @@ m = Basemap(llcrnrlon=lon_min,
 nridge = m.contour(nlon,nlat,ndirdiv,levels =[0],latlon=True)
 wridge = m.contour(wlon,wlat,wdirdiv,levels =[0],latlon=True)
 
+tracers = np.genfromtxt('m_drifters.txt', delimiter=',')
 
 plt.figure(2)
 plt.subplot(121)
@@ -98,11 +99,12 @@ plt.subplot(111)
 m.drawcoastlines()
 nridge = m.contour(nlon,nlat,ndirdiv,levels =[0],colors='red',latlon=True,alpha=0.6)
 wridge = m.contour(wlon,wlat,wdirdiv,levels =[0],colors='blue',latlon=True,alpha=0.6)
+m.scatter(tracers[:,0],tracers[:,1],latlon=True,color='black')
 parallels = np.arange(round(lat_min,1),lat_max+0.1,0.1)
 meridians = np.arange(round(lon_max,1),lon_min-0.1,-0.1)
 m.drawparallels(parallels,labels=[1,0,0,0],fontsize=10)
 # draw meridians
-plt.title('Blue = Windage 0.019, Red = No Windage, 2pm EDT')
+plt.title('Blue = Windage 0.019, Red = No Windage, 11am EDT')
 m.drawmeridians(meridians,labels=[0,0,0,1],fontsize=10)
 ax = plt.gca()
 def format_coord(x, y):

@@ -9,7 +9,7 @@ import h5py as hp
 timestep=0
 dx = 200
 dy = 200
-root = Dataset('no_windage.nc','r')
+root = Dataset('2pm_no_windage.nc','r')
 londfile = root.variables
 nlat = londfile['lat'][:]
 nlon = londfile['lon'][:]
@@ -21,7 +21,7 @@ ydim , xdim = nftle.shape
 #print(time.gmtime(t[0]*24*60*60+tstart))
 nftle = ma.masked_where(nftle==999,nftle)
 
-root = Dataset('windage=0,019.nc','r')
+root = Dataset('2pm_windage=0,019.nc','r')
 londfile = root.variables
 wlat = londfile['lat'][:]
 wlon = londfile['lon'][:]
