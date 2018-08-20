@@ -13,6 +13,7 @@ lat_max = 41.4548797564
 lat_min = 41.0250244184
 lon_max = -70.2909317079
 lon_min = -70.916465753
+'''
 root = Dataset('windageTracers.nc','r')
 loadfile = root.variables
 wtlat = loadfile['lat'][:]
@@ -40,7 +41,7 @@ nlat = loadfile['lat'][:]
 nlon = loadfile['lon'][:]
 #t = loadfile['time'][:]
 root.close()
-
+'''
 m = Basemap(llcrnrlon=lon_min,
             llcrnrlat=lat_min,
             urcrnrlon=lon_max,
@@ -73,7 +74,7 @@ meridians = np.arange(round(lon_max,1),lon_min-0.1,-0.1)
 m.drawparallels(parallels,labels=[1,0,0,0],fontsize=10)
 m.drawmeridians(meridians,labels=[0,0,0,1],fontsize=10)
 plt.savefig('WindageLCS.png', transparent=False, bbox_inches='tight')
-
+""""
 
 fig = plt.figure(2,figsize=pltsize, dpi=150)
 m = Basemap(llcrnrlon=-70.9,
@@ -147,6 +148,6 @@ m.drawcoastlines()
 m.drawparallels(parallels,labels=[1,0,0,0],fontsize=10)
 m.drawmeridians(meridians,labels=[0,0,0,1],fontsize=10)
 plt.savefig('NoWindageTracers.png', transparent=False, bbox_inches='tight')
-
+"""
 
 
