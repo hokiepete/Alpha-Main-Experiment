@@ -116,7 +116,7 @@ m = Basemap(llcrnrlon=-70.9,
             resolution = 'f',
             area_thresh=0.,
             )
-
+#"""
 m.scatter(ntlon[:,:9],ntlat[:,:9], latlon=True,color='orange',label="No Windage Tracers")
 m.scatter(wtlon[:,:9],wtlat[:,:9], latlon=True,color='cyan',label="Windage Tracers")
 plt.legend()
@@ -169,4 +169,4 @@ plt.savefig('NoWindageTracers.png', transparent=False, bbox_inches='tight')
 
 
 
-"""
+#"""

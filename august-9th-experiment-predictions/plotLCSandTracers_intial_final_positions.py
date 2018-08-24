@@ -27,7 +27,7 @@ ntlon = loadfile['lon'][:]
 #t = loadfile['time'][:]
 root.close()
         
-root = Dataset('windageLCS.nc','r')
+root = Dataset('windageLCS.hdf5','r')
 loadfile = root.variables
 wlat = loadfile['lat'][:]
 wlon = loadfile['lon'][:]
