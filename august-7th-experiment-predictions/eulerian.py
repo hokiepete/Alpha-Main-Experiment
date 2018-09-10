@@ -85,9 +85,12 @@ m = Basemap(llcrnrlon=lon_min,
             resolution = 'i',
             area_thresh=0.,
             )
-'''
+#'''
+
 parallels = np.arange(round(lat_min,1),lat_max+0.1,0.1)
 meridians = np.arange(round(lon_max,1),lon_min-0.1,-0.1)
+pltsize = [15,12]
+#'''
 m = Basemap(llcrnrlon=-70.9,
             llcrnrlat=41.25,
             urcrnrlon=-70.7,
@@ -98,6 +101,7 @@ m = Basemap(llcrnrlon=-70.9,
             resolution = 'f',
             area_thresh=0.,
             )
+'''
 root = Dataset('m_drifters_windage.nc','r')
 loadfile = root.variables
 wtlat = loadfile['lat'][:]
@@ -112,7 +116,6 @@ ntlon = loadfile['lon'][:]
 #t = loadfile['time'][:]
 root.close()
 
-pltsize = [15,12]
 fig = plt.figure(1,figsize=pltsize, dpi=150)
 sc = m.contourf(lon,lat,s1_nowindage,levels=np.linspace(s1_nowindage.min(axis=None),s1_nowindage.max(axis=None),301),latlon=True)
 m.scatter(ntlon,ntlat, latlon=True,color='orange',label="No Windage Tracers")
@@ -143,3 +146,17 @@ divider = make_axes_locatable(plt.gca())
 cax = divider.append_axes("right", size="5%", pad=0.05)
 plt.colorbar(sc, cax=cax)
 plt.savefig('Windage_S1_Closeup.png', transparent=False, bbox_inches='tight')
+'''
+u = u_sea + wc*u_wind
+v = v_sea + wc*v_wind
+fig = plt.figure(3,figsize=pltsize, dpi=150)
+m.quiver(lon[::10,::10],lat[::10,::10],u_wind[::10,::10],v_wind[::10,::10],latlon=True,color='blue',label='Wind Velocity',scale=100)
+m.quiver(lon[::10,::10],lat[::10,::10],u[::10,::10],v[::10,::10],latlon=True,color='black',label='Hybrid Velocity',scale=10)
+m.quiver(lon[::10,::10],lat[::10,::10],u_sea[::10,::10],v_sea[::10,::10],latlon=True,color='orange',label='Sea Velocity',scale=10)
+plt.legend()
+plt.title("Velocity fields at 2pm")
+m.drawcoastlines()
+m.drawparallels(parallels,labels=[1,0,0,0],fontsize=10)
+m.drawmeridians(meridians,labels=[0,0,0,1],fontsize=10)
+plt.show()
+plt.savefig('quiver.png', transparent=False, bbox_inches='tight')
