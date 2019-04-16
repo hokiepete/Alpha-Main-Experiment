@@ -9,11 +9,11 @@ import h5py as hp
 timestep=0
 dx = 200
 dy = 200
-root = Dataset('11am_no_windage.nc','r')
+root = Dataset('11am_EDT_8-9-2018_nowindage.nc','r')
 londfile = root.variables
 nlat = londfile['lat'][:]
 nlon = londfile['lon'][:]
-nftle = londfile['FTLE'][timestep,:,:,0]
+nftle = londfile['FTLE'][timestep,:,:]
 ncg = londfile['CauchyGreen'][timestep,:,:,:,:]
 t = londfile['time'][:]
 print(time.gmtime(t[0]+tstart))
@@ -21,15 +21,15 @@ ydim , xdim = nftle.shape
 #print(time.gmtime(t[0]*24*60*60+tstart))
 nftle = ma.masked_where(nftle==999,nftle)
 
-root = Dataset('11am_windage=0,019.nc','r')
+root = Dataset('11am_EDT_8-9-2018_windage=0_019.nc','r')
 londfile = root.variables
 wlat = londfile['lat'][:]
 wlon = londfile['lon'][:]
-wftle = londfile['FTLE'][timestep,:,:,0]
+wftle = londfile['FTLE'][timestep,:,:]
 wcg = londfile['CauchyGreen'][timestep,:,:,:,:]
 wftle = ma.masked_where(wftle==999,wftle)
 
-root = Dataset('11am_windage=0,009.nc','r')
+root = Dataset('11am_EDT_8-9-2018_windage=0_009.nc','r')
 londfile = root.variables
 llat = londfile['lat'][:]
 llon = londfile['lon'][:]
